@@ -37,8 +37,8 @@ public class Unsplash {
                 String.class
         );
 
-        JsonNode obj = mapper.readTree(response.getBody());
+        JsonNode jsonNode = mapper.readTree(response.getBody());
 
-        return obj.get("urls").get("raw").asText();
+        return jsonNode.get("urls").get("raw").asText();
     }
 }

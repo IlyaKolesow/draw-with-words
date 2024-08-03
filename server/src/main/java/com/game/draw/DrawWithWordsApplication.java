@@ -1,6 +1,5 @@
 package com.game.draw;
 
-import com.game.draw.util.Unsplash;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
