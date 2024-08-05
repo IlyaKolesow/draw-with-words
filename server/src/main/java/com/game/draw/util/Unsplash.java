@@ -28,7 +28,7 @@ public class Unsplash {
         url = "https://api.unsplash.com/photos/random";
     }
 
-    public String getImageUrl() throws JsonProcessingException {
+    public String getImageUrl() {
         headers.add("Authorization", key);
         ResponseEntity<String> response = restTemplate.exchange(
                 url,
@@ -37,7 +37,12 @@ public class Unsplash {
                 String.class
         );
 
-        JsonNode jsonNode = mapper.readTree(response.getBody());
+        JsonNode jsonNode;
+        try {
+            jsonNode = mapper.readTree(response.getBody());
+        } catch (JsonProcessingException e) {
+            throw new UnsplashException(e);
+        }
 
         return jsonNode.get("urls").get("raw").asText();
     }
