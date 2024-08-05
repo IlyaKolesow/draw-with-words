@@ -17,6 +17,9 @@ public class Player {
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
 
+    public Player(String name) {
+    }
+
     public Player() {
     }
 

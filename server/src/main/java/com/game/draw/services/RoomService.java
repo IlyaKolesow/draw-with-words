@@ -1,6 +1,5 @@
 package com.game.draw.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.game.draw.models.Room;
 import com.game.draw.repositories.RoomRepository;
 import com.game.draw.util.RoomNotFoundException;
@@ -19,8 +18,14 @@ public class RoomService {
         this.unsplash = unsplash;
     }
 
-    public Room save(String name) throws JsonProcessingException {
+    public Room create(String name) {
         return repository.save(new Room(name, unsplash.getImageUrl()));
+    }
+
+    public Room updateUrl(int id) {
+        Room room = findById(id);
+        room.setImageUrl(unsplash.getImageUrl());
+        return repository.save(room);
     }
 
     public void deleteById(int id) {
@@ -32,10 +37,10 @@ public class RoomService {
     }
 
     public Room findById(int id) {
-        return repository.findById(id).orElseThrow(() -> new RoomNotFoundException("Room with id " + id + "does not exist"));
+        return repository.findById(id).orElseThrow(() -> new RoomNotFoundException(id));
     }
 
-    private String getImage(int roomId) {
+    private String getImageByRoomId(int roomId) {
         return findById(roomId).getImageUrl();
     }
 }
