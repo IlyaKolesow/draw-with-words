@@ -22,9 +22,6 @@ class UnsplashTest {
     @Mock
     private RestTemplate restTemplate;
 
-    @Spy
-    private HttpHeaders headers;
-
     @Mock
     private ObjectMapper mapper;
 

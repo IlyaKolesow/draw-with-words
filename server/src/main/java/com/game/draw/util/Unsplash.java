@@ -13,25 +13,23 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class Unsplash {
-    private final String url;
+    private final String URL = "https://api.unsplash.com/photos/random";
     private final RestTemplate restTemplate;
-    private final HttpHeaders headers;
     private final ObjectMapper mapper;
 
     @Value("${unsplash.key}")
     private String key;
 
-    public Unsplash(RestTemplate restTemplate, HttpHeaders headers, ObjectMapper mapper) {
+    public Unsplash(RestTemplate restTemplate, ObjectMapper mapper) {
         this.restTemplate = restTemplate;
-        this.headers = headers;
         this.mapper = mapper;
-        url = "https://api.unsplash.com/photos/random";
     }
 
     public String getImageUrl() {
+        HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", key);
         ResponseEntity<String> response = restTemplate.exchange(
-                url,
+                URL,
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 String.class
