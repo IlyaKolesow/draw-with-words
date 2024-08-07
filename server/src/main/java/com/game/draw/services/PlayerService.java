@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PlayerService {
-    private PlayerRepository playerRepository;
-    private RoomRepository roomRepository;
+    private final PlayerRepository playerRepository;
+    private final RoomRepository roomRepository;
 
     public PlayerService(PlayerRepository playerRepository, RoomRepository roomRepository) {
         this.playerRepository = playerRepository;

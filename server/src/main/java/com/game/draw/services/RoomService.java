@@ -3,7 +3,6 @@ package com.game.draw.services;
 import com.game.draw.models.Room;
 import com.game.draw.repositories.RoomRepository;
 import com.game.draw.util.RoomNotFoundException;
-import com.game.draw.util.Unsplash;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
