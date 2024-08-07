@@ -8,8 +8,10 @@ import com.game.draw.util.PlayerNotFoundException;
 import com.game.draw.util.RoomIsFullException;
 import com.game.draw.util.RoomNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class PlayerService {
     private final PlayerRepository playerRepository;
     private final RoomRepository roomRepository;
@@ -19,6 +21,7 @@ public class PlayerService {
         this.roomRepository = roomRepository;
     }
 
+    @Transactional(readOnly = true)
     public Player findById(int id) {
         return playerRepository.findById(id).orElseThrow(() -> new PlayerNotFoundException(id));
     }
