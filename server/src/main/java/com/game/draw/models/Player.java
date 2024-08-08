@@ -18,6 +18,7 @@ public class Player {
     private Room room;
 
     public Player(String name) {
+        this.name = name;
     }
 
     public Player() {
