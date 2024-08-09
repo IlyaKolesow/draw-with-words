@@ -1,7 +1,9 @@
 package com.game.draw.controllers;
 
+import com.game.draw.dto.PlayerIdDTO;
 import com.game.draw.dto.RoomDTO;
 import com.game.draw.dto.RoomNameDTO;
+import com.game.draw.dto.RoomPlayerIdsDTO;
 import com.game.draw.services.GameService;
 import com.game.draw.util.DtoMapper;
 import org.springframework.web.bind.annotation.*;
@@ -19,26 +21,31 @@ public class RoomController {
 
     @GetMapping
     public List<RoomDTO> getRooms() {
-        return DtoMapper.map(service.findRooms());
+        return DtoMapper.mapToRoomDTO(service.findRooms());
     }
 
     @GetMapping("/{id}")
     public RoomDTO getRoom(@PathVariable int id) {
-        return DtoMapper.map(service.findRoom(id));
+        return DtoMapper.mapToRoomDTO(service.findRoom(id));
     }
 
     @PostMapping
     public RoomDTO createRoom(@RequestBody RoomNameDTO dto) {
-        return DtoMapper.map(service.createRoom(dto.getName()));
+        return DtoMapper.mapToRoomDTO(service.createRoom(dto.getName()));
     }
 
     @PatchMapping("/{id}")
     public RoomDTO update(@PathVariable int id, @RequestBody RoomNameDTO dto) {
-        return DtoMapper.map(service.updateRoom(id, dto.getName()));
+        return DtoMapper.mapToRoomDTO(service.updateRoom(id, dto.getName()));
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
-        service.deleteRoom(id);
+    @PostMapping("/join")
+    public void join(@RequestBody RoomPlayerIdsDTO dto) {
+        service.joinTheRoom(dto.getPlayerId(), dto.getRoomId());
+    }
+
+    @PostMapping("/leave")
+    public void leave(@RequestBody PlayerIdDTO dto) {
+        service.leaveTheRoom(dto.getId());
     }
 }

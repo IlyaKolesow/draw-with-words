@@ -62,12 +62,17 @@ public class GameService {
         return playerRepository.save(new Player(name));
     }
 
+    public Player updatePlayer(int id, String name) {
+        Player player = findPlayer(id);
+        player.setName(name);
+        return playerRepository.save(player);
+    }
+
     public void joinTheRoom(int playerId, int roomId) {
         Room room = findRoom(roomId);
 
-        if (room.getPlayers().size() >= 5) {
+        if (room.getPlayers().size() >= 5)
             throw new RoomIsFullException(roomId);
-        }
 
         Player player = findPlayer(playerId);
         player.setRoom(room);
@@ -81,7 +86,16 @@ public class GameService {
         Room room = player.getRoom();
         player.setRoom(null);
         room.getPlayers().remove(player);
+
+        if (room.getPlayers().isEmpty())
+            deleteRoom(room.getId());
+        else
+            roomRepository.save(room);
+
         playerRepository.save(player);
-        roomRepository.save(room);
+    }
+
+    public void deletePlayer(int id) {
+        playerRepository.deleteById(id);
     }
 }

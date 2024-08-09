@@ -1,16 +1,7 @@
 package com.game.draw.dto;
 
-public class RoomDTO {
-    private int id;
+public class PlayerNameDTO {
     private String name;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
