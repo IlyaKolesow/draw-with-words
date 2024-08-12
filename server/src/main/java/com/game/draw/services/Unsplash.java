@@ -40,7 +40,7 @@ public class Unsplash {
         try {
             jsonNode = mapper.readTree(response.getBody());
         } catch (JsonProcessingException e) {
-            throw new UnsplashException(e);
+            throw new UnsplashException("Error parsing JSON response", e);
         }
 
         return jsonNode.get("urls").get("raw").asText();

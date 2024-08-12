@@ -6,6 +6,7 @@ public class PlayerDTO {
 
     @JsonProperty("player_id")
     private Integer playerId;
+
     private String name;
 
     @JsonProperty("room_id")

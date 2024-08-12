@@ -6,6 +6,11 @@ import com.game.draw.dto.RoomNameDTO;
 import com.game.draw.dto.RoomPlayerIdsDTO;
 import com.game.draw.services.GameService;
 import com.game.draw.util.DtoMapper;
+import com.game.draw.util.ErrorResponse;
+import com.game.draw.util.RoomIsFullException;
+import com.game.draw.util.RoomNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,5 +52,17 @@ public class RoomController {
     @PostMapping("/leave")
     public void leave(@RequestBody PlayerIdDTO dto) {
         service.leaveTheRoom(dto.getId());
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handleException(RoomNotFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handleException(RoomIsFullException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 }
