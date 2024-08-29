@@ -1,3 +1,23 @@
+function joinTheRoom(roomId, roomName) {
+    const playerId = sessionStorage.getItem("playerId");
+    fetch("http://localhost:8080/rooms/join", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({
+            player_id: playerId,
+            room_id: roomId
+        })
+    })
+        .then(() => {
+            sessionStorage.setItem("roomId", roomId);
+            sessionStorage.setItem("roomName", roomName);
+            location = "lobby.html";
+        });
+}
+
 document.getElementById("create-btn").addEventListener("click", () => {
     const roomName = document.getElementById("create-input").value;
 
@@ -10,23 +30,10 @@ document.getElementById("create-btn").addEventListener("click", () => {
         body: JSON.stringify({
             name: roomName
         })
-    });
+    })
+        .then(response => response.json())
+        .then(room => joinTheRoom(room.id, room.name));
 });
-
-function joinTheRoom(roomId) {
-    const playerId = sessionStorage.getItem("playerId");
-    fetch("http://localhost:8080/rooms/join", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify({
-            player_id: playerId,
-            room_id: roomId
-        })
-    });
-}
 
 function createRoomBlock(id, name, quantity) {
     const roomBlock = document.createElement("div");
@@ -38,7 +45,7 @@ function createRoomBlock(id, name, quantity) {
     playerQuantity.textContent = quantity + "/" + 5;
     joinButton.textContent = "Присоединиться";
 
-    joinButton.addEventListener("click", () => joinTheRoom(id));
+    joinButton.addEventListener("click", () => joinTheRoom(id, name));
 
     roomBlock.appendChild(roomName);
     roomBlock.appendChild(playerQuantity);
@@ -50,8 +57,7 @@ function createRoomBlock(id, name, quantity) {
 function getPlayerQuantity(roomId) {
     const quantity = fetch("http://localhost:8080/players/in/" + roomId)
         .then(response => response.json())
-        .then(players => players.length)
-        .catch(err => console.log(err));
+        .then(players => players.length);
     return quantity;
 }
 
