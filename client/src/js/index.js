@@ -1,6 +1,4 @@
-const btn = document.getElementById("auth-btn");
-
-btn.addEventListener("click", () => {
+document.getElementById("auth-btn").addEventListener("click", () => {
 
     let playerName = document.getElementById("auth-input").value;
 
@@ -18,7 +16,6 @@ btn.addEventListener("click", () => {
     .then(player => {
         sessionStorage.setItem("playerName", player.name);
         sessionStorage.setItem("playerId", player.player_id);
+        location = "rooms.html";
     });
-
-    location = "rooms.html";
 });

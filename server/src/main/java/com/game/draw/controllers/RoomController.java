@@ -5,16 +5,14 @@ import com.game.draw.dto.RoomDTO;
 import com.game.draw.dto.RoomNameDTO;
 import com.game.draw.dto.RoomPlayerIdsDTO;
 import com.game.draw.services.GameService;
-import com.game.draw.util.DtoMapper;
-import com.game.draw.util.ErrorResponse;
-import com.game.draw.util.RoomIsFullException;
-import com.game.draw.util.RoomNotFoundException;
+import com.game.draw.util.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/rooms")
 public class RoomController {
@@ -64,5 +62,11 @@ public class RoomController {
     private ResponseEntity<ErrorResponse> handleException(RoomIsFullException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handleException(PlayerNotFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 }
