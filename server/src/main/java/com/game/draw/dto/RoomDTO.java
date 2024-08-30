@@ -4,6 +4,16 @@ public class RoomDTO {
     private int id;
     private String name;
 
+    private String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public int getId() {
         return id;
     }

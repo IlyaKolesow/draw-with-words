@@ -14,14 +14,26 @@ public class Room {
 
     private String name;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @OneToMany(mappedBy = "room")
     private List<Player> players;
 
     public Room() {
     }
 
-    public Room(String name) {
+    public Room(String name, String imageUrl) {
         this.name = name;
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public int getId() {

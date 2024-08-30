@@ -1,4 +1,4 @@
-function joinTheRoom(roomId, roomName) {
+function joinTheRoom(room) {
     const playerId = sessionStorage.getItem("playerId");
     fetch("http://localhost:8080/rooms/join", {
         method: "POST",
@@ -8,12 +8,12 @@ function joinTheRoom(roomId, roomName) {
         },
         body: JSON.stringify({
             player_id: playerId,
-            room_id: roomId
+            room_id: room.id
         })
     })
         .then(() => {
-            sessionStorage.setItem("roomId", roomId);
-            sessionStorage.setItem("roomName", roomName);
+            sessionStorage.setItem("roomId", room.id);
+            sessionStorage.setItem("roomName", room.name);
             location = "lobby.html";
         });
 }
@@ -32,20 +32,20 @@ document.getElementById("create-btn").addEventListener("click", () => {
         })
     })
         .then(response => response.json())
-        .then(room => joinTheRoom(room.id, room.name));
+        .then(room => joinTheRoom(room));
 });
 
-function createRoomBlock(id, name, quantity) {
+function createRoomBlock(room, quantity) {
     const roomBlock = document.createElement("div");
     const roomName = document.createElement("p");
     const playerQuantity = document.createElement("p");
     const joinButton = document.createElement("button");
 
-    roomName.textContent = name;
+    roomName.textContent = room.name;
     playerQuantity.textContent = quantity + "/" + 5;
     joinButton.textContent = "Присоединиться";
 
-    joinButton.addEventListener("click", () => joinTheRoom(id, name));
+    joinButton.addEventListener("click", () => joinTheRoom(room));
 
     roomBlock.appendChild(roomName);
     roomBlock.appendChild(playerQuantity);
@@ -68,7 +68,7 @@ fetch("http://localhost:8080/rooms")
         rooms.forEach(async (room) => {
             const quantity = await getPlayerQuantity(room.id);
             if (quantity < 5) {
-                const roomBlock = createRoomBlock(room.id, room.name, quantity);
+                const roomBlock = createRoomBlock(room, quantity);
                 roomList.appendChild(roomBlock);
             }
         });

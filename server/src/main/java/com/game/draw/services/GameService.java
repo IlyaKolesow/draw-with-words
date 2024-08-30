@@ -17,14 +17,16 @@ import java.util.List;
 public class GameService {
     private final PlayerRepository playerRepository;
     private final RoomRepository roomRepository;
+    private final Unsplash unsplash;
 
-    public GameService(PlayerRepository playerRepository, RoomRepository roomRepository) {
+    public GameService(PlayerRepository playerRepository, RoomRepository roomRepository, Unsplash unsplash) {
         this.playerRepository = playerRepository;
         this.roomRepository = roomRepository;
+        this.unsplash = unsplash;
     }
 
     public Room createRoom(String name) {
-        return roomRepository.save(new Room(name));
+        return roomRepository.save(new Room(name, unsplash.getImageUrl()));
     }
 
     public Room updateRoom(int id, String name) {

@@ -13,6 +13,7 @@ public class DtoMapper {
         RoomDTO dto = new RoomDTO();
         dto.setId(room.getId());
         dto.setName(room.getName());
+        dto.setImageUrl(room.getImageUrl());
         return dto;
     }
 

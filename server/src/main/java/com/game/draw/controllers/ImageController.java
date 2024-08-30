@@ -2,7 +2,6 @@ package com.game.draw.controllers;
 
 import com.game.draw.dto.QueryDTO;
 import com.game.draw.services.FusionBrain;
-import com.game.draw.services.Unsplash;
 import com.game.draw.util.ErrorResponse;
 import com.game.draw.util.FusionBrainException;
 import com.game.draw.util.UnsplashException;
@@ -16,19 +15,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/image")
 public class ImageController {
-    private final Unsplash unsplash;
     private final FusionBrain fusionBrain;
 
-    public ImageController(Unsplash unsplash, FusionBrain fusionBrain) {
-        this.unsplash = unsplash;
+    public ImageController(FusionBrain fusionBrain) {
         this.fusionBrain = fusionBrain;
-    }
-
-    @GetMapping("/template")
-    public ResponseEntity<Map<String, String>> getTemplate() {
-        Map<String, String> response = new HashMap<>();
-        response.put("url", unsplash.getImageUrl());
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/generate")
