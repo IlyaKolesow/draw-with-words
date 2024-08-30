@@ -17,6 +17,8 @@ public class Room {
     @Column(name = "image_url")
     private String imageUrl;
 
+    private String status;
+
     @OneToMany(mappedBy = "room")
     private List<Player> players;
 
@@ -26,6 +28,14 @@ public class Room {
     public Room(String name, String imageUrl) {
         this.name = name;
         this.imageUrl = imageUrl;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getImageUrl() {

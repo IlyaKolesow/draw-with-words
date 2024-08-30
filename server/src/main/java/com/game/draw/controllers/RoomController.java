@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -50,6 +52,18 @@ public class RoomController {
     @PostMapping("/leave")
     public void leave(@RequestBody PlayerIdDTO dto) {
         service.leaveTheRoom(dto.getId());
+    }
+
+    @GetMapping("/{id}/play")
+    public void startGame(@PathVariable int id) {
+        service.startGame(id);
+    }
+
+    @GetMapping("/{id}/status")
+    public ResponseEntity<Map<String, String>> checkStatus(@PathVariable int id) {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", service.checkRoomStatus(id));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler

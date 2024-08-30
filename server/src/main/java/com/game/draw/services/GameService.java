@@ -100,4 +100,14 @@ public class GameService {
     public void deletePlayer(int id) {
         playerRepository.deleteById(id);
     }
+
+    public void startGame(int roomId) {
+        Room room = findRoom(roomId);
+        room.setStatus("inGame");
+    }
+
+    public String checkRoomStatus(int roomId) {
+        Room room = findRoom(roomId);
+        return room.getStatus();
+    }
 }
