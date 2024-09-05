@@ -1,4 +1,4 @@
-package com.game.draw.util;
+package com.game.draw.exceptions;
 
 public class UnsplashException extends RuntimeException {
     public UnsplashException(String message, Exception e) {

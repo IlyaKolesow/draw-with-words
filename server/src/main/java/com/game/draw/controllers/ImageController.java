@@ -3,8 +3,8 @@ package com.game.draw.controllers;
 import com.game.draw.dto.QueryDTO;
 import com.game.draw.services.FusionBrain;
 import com.game.draw.util.ErrorResponse;
-import com.game.draw.util.FusionBrainException;
-import com.game.draw.util.UnsplashException;
+import com.game.draw.exceptions.FusionBrainException;
+import com.game.draw.exceptions.UnsplashException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/image")
 public class ImageController {

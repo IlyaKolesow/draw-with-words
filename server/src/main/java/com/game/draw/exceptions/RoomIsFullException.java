@@ -1,4 +1,4 @@
-package com.game.draw.util;
+package com.game.draw.exceptions;
 
 public class RoomIsFullException extends RuntimeException {
     public RoomIsFullException(int id) {

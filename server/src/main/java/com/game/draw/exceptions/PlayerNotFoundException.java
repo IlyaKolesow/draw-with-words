@@ -1,4 +1,4 @@
-package com.game.draw.util;
+package com.game.draw.exceptions;
 
 public class PlayerNotFoundException extends RuntimeException {
     public PlayerNotFoundException(int id) {

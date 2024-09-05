@@ -3,7 +3,7 @@ package com.game.draw.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.game.draw.util.FusionBrainException;
+import com.game.draw.exceptions.FusionBrainException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

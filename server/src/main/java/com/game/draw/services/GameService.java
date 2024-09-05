@@ -4,9 +4,9 @@ import com.game.draw.models.Player;
 import com.game.draw.models.Room;
 import com.game.draw.repositories.PlayerRepository;
 import com.game.draw.repositories.RoomRepository;
-import com.game.draw.util.PlayerNotFoundException;
-import com.game.draw.util.RoomIsFullException;
-import com.game.draw.util.RoomNotFoundException;
+import com.game.draw.exceptions.PlayerNotFoundException;
+import com.game.draw.exceptions.RoomIsFullException;
+import com.game.draw.exceptions.RoomNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
