@@ -1,3 +1,5 @@
+import { roomSocket, playerSocket } from "./sockets.js";
+
 function joinTheRoom(room) {
     const playerId = sessionStorage.getItem("playerId");
     fetch("http://localhost:8080/rooms/join", {
@@ -14,6 +16,9 @@ function joinTheRoom(room) {
         .then(() => {
             sessionStorage.setItem("roomId", room.id);
             sessionStorage.setItem("roomName", room.name);
+            sessionStorage.setItem("imageOrig", room.imageUrl);
+            roomSocket.send("");
+            playerSocket.send("");
             location = "lobby.html";
         });
 }
@@ -61,15 +66,26 @@ function getPlayerQuantity(roomId) {
     return quantity;
 }
 
-fetch("http://localhost:8080/rooms")
-    .then(response => response.json())
-    .then(rooms => {
-        const roomList = document.getElementById("room-list");
-        rooms.forEach(async (room) => {
-            const quantity = await getPlayerQuantity(room.id);
-            if (quantity < 5) {
-                const roomBlock = createRoomBlock(room, quantity);
-                roomList.appendChild(roomBlock);
-            }
+function fetchRooms() {
+    fetch("http://localhost:8080/rooms")
+        .then(response => response.json())
+        .then(rooms => {
+            const roomList = document.getElementById("room-list");
+            roomList.innerHTML = "";
+            rooms.forEach(async (room) => {
+                const quantity = await getPlayerQuantity(room.id);
+                if (quantity < 5 && room.status != "inGame") {
+                    const roomBlock = createRoomBlock(room, quantity);
+                    roomList.appendChild(roomBlock);
+                }
+            });
         });
-    });
+}
+
+roomSocket.onopen = event => {
+    fetchRooms();
+};
+
+roomSocket.onmessage = event => {
+    fetchRooms();
+};

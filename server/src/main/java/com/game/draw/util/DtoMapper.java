@@ -14,6 +14,7 @@ public class DtoMapper {
         dto.setId(room.getId());
         dto.setName(room.getName());
         dto.setImageUrl(room.getImageUrl());
+        dto.setStatus(room.getStatus());
         return dto;
     }
 

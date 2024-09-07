@@ -3,8 +3,8 @@ package com.game.draw.dto;
 public class RoomDTO {
     private int id;
     private String name;
-
     private String imageUrl;
+    private String status;
 
     public String getImageUrl() {
         return imageUrl;
@@ -28,5 +28,13 @@ public class RoomDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
