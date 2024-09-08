@@ -29,15 +29,29 @@ function checkStatus(uuid) {
             .then(response => response.json())
             .then(data => {
                 if (data.image != "PROCESSING") {
-                    imageSocket.send("data:image/png;base64, " + data.image);
+                    imageSocket.send(JSON.stringify({
+                        playerName: sessionStorage.getItem("playerName"),
+                        roomId: sessionStorage.getItem("roomId"),
+                        image: "data:image/png;base64, " + data.image
+                    }));
                     clearInterval(timerId);
                 }
             });
     }, 2000);
 }
 
-const imageResults = [];
+let generationResults;
+
+if (sessionStorage.getItem("generationResults"))
+    generationResults = JSON.parse(sessionStorage.getItem("generationResults"));
+else
+    generationResults = [];
 
 imageSocket.onmessage = event => {
-    imageResults.push(event.data);
+    let data = JSON.parse(event.data);
+
+    if (data.roomId == sessionStorage.getItem("roomId")) {
+        generationResults.push(data);
+        sessionStorage.setItem("generationResults", JSON.stringify(generationResults));
+    }
 };

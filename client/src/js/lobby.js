@@ -1,5 +1,7 @@
 import { playerSocket, roomSocket } from "./sockets.js";
 
+const roomId = sessionStorage.getItem("roomId");
+
 function leave() {
     const playerId = sessionStorage.getItem("playerId");
     fetch("http://localhost:8080/rooms/leave", {
@@ -16,14 +18,18 @@ function leave() {
             sessionStorage.removeItem("roomId");
             sessionStorage.removeItem("roomName");
             playerSocket.send("");
+            roomSocket.send("");
             location = "rooms.html";
         });
 }
 
 function play() {
-    fetch("http://localhost:8080/rooms/" + sessionStorage.getItem("roomId") + "/play")
+    fetch("http://localhost:8080/rooms/" + roomId + "/play")
         .then(() => {
-            roomSocket.send("start");
+            roomSocket.send(JSON.stringify({
+                roomId: roomId,
+                action: "start"
+            }));
             location = "game.html";
         });
 }
@@ -33,7 +39,7 @@ document.getElementById("play-btn").addEventListener("click", play);
 document.getElementsByTagName("h1")[0].textContent = sessionStorage.getItem("roomName");
 
 function fetchPlayers() {
-    fetch("http://localhost:8080/players/in/" + sessionStorage.getItem("roomId"))
+    fetch("http://localhost:8080/players/in/" + roomId)
         .then(response => response.json())
         .then(players => {
             const playerList = document.getElementById("player-list");
@@ -55,6 +61,9 @@ playerSocket.onmessage = event => {
 };
 
 roomSocket.onmessage = event => {
-    if (event.data == "start")
-        location = "game.html";
+    if (event.data) {
+        let data = JSON.parse(event.data);
+        if (data.roomId == roomId && data.action == "start")
+            location = "game.html";
+    }
 };
