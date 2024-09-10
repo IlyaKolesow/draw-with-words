@@ -1,9 +1,6 @@
 package com.game.draw.controllers;
 
-import com.game.draw.dto.PlayerIdDTO;
-import com.game.draw.dto.RoomDTO;
-import com.game.draw.dto.RoomNameDTO;
-import com.game.draw.dto.RoomPlayerIdsDTO;
+import com.game.draw.dto.*;
 import com.game.draw.exceptions.PlayerNotFoundException;
 import com.game.draw.exceptions.RoomIsFullException;
 import com.game.draw.exceptions.RoomNotFoundException;
@@ -57,9 +54,9 @@ public class RoomController {
         service.leaveTheRoom(dto.getId());
     }
 
-    @GetMapping("/{id}/play")
-    public void startGame(@PathVariable int id) {
-        service.startGame(id);
+    @PostMapping("/status")
+    public RoomDTO setRoomStatus(@RequestBody RoomStatusDTO dto) {
+        return DtoMapper.mapToRoomDTO(service.setRoomStatus(dto.getRoomId(), dto.getStatus()));
     }
 
     @GetMapping("/{id}/status")

@@ -1,19 +1,13 @@
 import { playerSocket, roomSocket } from "./sockets.js";
+import { postJSON } from "./util.js";
 
 const roomId = sessionStorage.getItem("roomId");
 
 function leave() {
     const playerId = sessionStorage.getItem("playerId");
-    fetch("http://localhost:8080/rooms/leave", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify({
-            id: playerId
-        })
-    })
+    fetch("http://localhost:8080/rooms/leave",
+        postJSON({ id: playerId })
+    )
         .then(() => {
             sessionStorage.removeItem("roomId");
             sessionStorage.removeItem("roomName");
@@ -24,13 +18,19 @@ function leave() {
 }
 
 function play() {
-    fetch("http://localhost:8080/rooms/" + roomId + "/play")
-        .then(() => {
+    fetch("http://localhost:8080/rooms/status",
+        postJSON({
+            roomId: roomId,
+            status: "inGame"
+        })
+    )
+        .then(response => response.json())
+        .then(room => {
             roomSocket.send(JSON.stringify({
                 roomId: roomId,
-                action: "start"
+                action: "start",
+                image: room.imageUrl
             }));
-            location = "game.html";
         });
 }
 
@@ -63,7 +63,9 @@ playerSocket.onmessage = event => {
 roomSocket.onmessage = event => {
     if (event.data) {
         let data = JSON.parse(event.data);
-        if (data.roomId == roomId && data.action == "start")
+        if (data.roomId == roomId && data.action == "start") {
+            sessionStorage.setItem("imageOrig", data.image);
             location = "game.html";
+        }
     }
 };

@@ -26,7 +26,7 @@ public class GameService {
     }
 
     public Room createRoom(String name) {
-        return roomRepository.save(new Room(name, unsplash.getImageUrl()));
+        return roomRepository.save(new Room(name));
     }
 
     public Room updateRoom(int id, String name) {
@@ -101,9 +101,16 @@ public class GameService {
         playerRepository.deleteById(id);
     }
 
-    public void startGame(int roomId) {
+    public Room setRoomStatus(int roomId, String status) {
         Room room = findRoom(roomId);
-        room.setStatus("inGame");
+        room.setStatus(status);
+
+        if (status.equals("inGame"))
+            room.setImageUrl(unsplash.getImageUrl());
+        else
+            room.setImageUrl(null);
+
+        return roomRepository.save(room);
     }
 
     public String checkRoomStatus(int roomId) {

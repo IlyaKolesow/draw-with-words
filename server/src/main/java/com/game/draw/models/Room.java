@@ -25,9 +25,8 @@ public class Room {
     public Room() {
     }
 
-    public Room(String name, String imageUrl) {
+    public Room(String name) {
         this.name = name;
-        this.imageUrl = imageUrl;
     }
 
     public String getStatus() {

@@ -1,22 +1,17 @@
 import { roomSocket, playerSocket } from "./sockets.js";
+import { getPlayerQuantity, postJSON } from "./util.js";
 
 function joinTheRoom(room) {
     const playerId = sessionStorage.getItem("playerId");
-    fetch("http://localhost:8080/rooms/join", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify({
+    fetch("http://localhost:8080/rooms/join",
+        postJSON({
             player_id: playerId,
             room_id: room.id
         })
-    })
+    )
         .then(() => {
             sessionStorage.setItem("roomId", room.id);
             sessionStorage.setItem("roomName", room.name);
-            sessionStorage.setItem("imageOrig", room.imageUrl);
             roomSocket.send("");
             playerSocket.send("");
             location = "lobby.html";
@@ -26,16 +21,9 @@ function joinTheRoom(room) {
 document.getElementById("create-btn").addEventListener("click", () => {
     const roomName = document.getElementById("create-input").value;
 
-    fetch("http://localhost:8080/rooms", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify({
-            name: roomName
-        })
-    })
+    fetch("http://localhost:8080/rooms",
+        postJSON({ name: roomName })
+    )
         .then(response => response.json())
         .then(room => joinTheRoom(room));
 });
@@ -57,13 +45,6 @@ function createRoomBlock(room, quantity) {
     roomBlock.appendChild(joinButton);
 
     return roomBlock;
-}
-
-function getPlayerQuantity(roomId) {
-    const quantity = fetch("http://localhost:8080/players/in/" + roomId)
-        .then(response => response.json())
-        .then(players => players.length);
-    return quantity;
 }
 
 function fetchRooms() {
