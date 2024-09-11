@@ -1,15 +1,8 @@
 package com.game.draw.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class PlayerDTO {
-
-    @JsonProperty("player_id")
     private Integer playerId;
-
     private String name;
-
-    @JsonProperty("room_id")
     private Integer roomId;
 
     public int getPlayerId() {

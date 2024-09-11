@@ -1,11 +1,9 @@
 package com.game.draw.controllers;
 
 import com.game.draw.dto.*;
-import com.game.draw.exceptions.PlayerNotFoundException;
-import com.game.draw.exceptions.RoomIsFullException;
-import com.game.draw.exceptions.RoomNotFoundException;
 import com.game.draw.services.GameService;
 import com.game.draw.util.*;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +33,12 @@ public class RoomController {
     }
 
     @PostMapping
-    public RoomDTO createRoom(@RequestBody RoomNameDTO dto) {
+    public RoomDTO createRoom(@RequestBody @Valid RoomNameDTO dto) {
         return DtoMapper.mapToRoomDTO(service.createRoom(dto.getName()));
     }
 
     @PatchMapping("/{id}")
-    public RoomDTO update(@PathVariable int id, @RequestBody RoomNameDTO dto) {
+    public RoomDTO update(@PathVariable int id, @RequestBody @Valid RoomNameDTO dto) {
         return DtoMapper.mapToRoomDTO(service.updateRoom(id, dto.getName()));
     }
 
@@ -64,23 +62,5 @@ public class RoomController {
         Map<String, String> response = new HashMap<>();
         response.put("status", service.checkRoomStatus(id));
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(RoomNotFoundException e) {
-        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(RoomIsFullException e) {
-        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(PlayerNotFoundException e) {
-        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 }

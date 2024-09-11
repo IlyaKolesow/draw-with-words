@@ -1,12 +1,12 @@
 import { roomSocket, playerSocket } from "./sockets.js";
-import { getPlayerQuantity, postJSON } from "./util.js";
+import { getPlayerQuantity, inputValidation, postJSON } from "./util.js";
 
 function joinTheRoom(room) {
     const playerId = sessionStorage.getItem("playerId");
     fetch("http://localhost:8080/rooms/join",
         postJSON({
-            player_id: playerId,
-            room_id: room.id
+            playerId: playerId,
+            roomId: room.id
         })
     )
         .then(() => {
@@ -21,11 +21,16 @@ function joinTheRoom(room) {
 document.getElementById("create-btn").addEventListener("click", () => {
     const roomName = document.getElementById("create-input").value;
 
-    fetch("http://localhost:8080/rooms",
-        postJSON({ name: roomName })
-    )
-        .then(response => response.json())
-        .then(room => joinTheRoom(room));
+    if (inputValidation(roomName)) {
+        fetch("http://localhost:8080/rooms",
+            postJSON({ name: roomName })
+        )
+            .then(response => response.json())
+            .then(room => joinTheRoom(room));
+    } else {
+        /////
+        console.log("wrong");
+    }
 });
 
 function createRoomBlock(room, quantity) {

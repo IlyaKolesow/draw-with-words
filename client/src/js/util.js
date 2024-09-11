@@ -16,3 +16,12 @@ export function getPlayerQuantity(roomId) {
         .then(players => players.length);
     return quantity;
 }
+
+export function inputValidation(input) {
+    const regexp = /^\w{2,}$/;
+
+    if (regexp.test(input))
+        return true;
+    else
+        return false;
+}
