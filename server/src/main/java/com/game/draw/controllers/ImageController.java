@@ -2,6 +2,7 @@ package com.game.draw.controllers;
 
 import com.game.draw.dto.QueryDTO;
 import com.game.draw.services.FusionBrain;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class ImageController {
     }
 
     @PostMapping("/generate")
-    public ResponseEntity<Map<String, String>> generate(@RequestBody QueryDTO dto) {
+    public ResponseEntity<Map<String, String>> generate(@RequestBody @Valid QueryDTO dto) {
         Map<String, String> response = new HashMap<>();
         response.put("uuid", fusionBrain.generate(dto.getQuery()));
         return new ResponseEntity<>(response, HttpStatus.OK);

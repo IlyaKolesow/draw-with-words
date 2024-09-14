@@ -1,5 +1,5 @@
 import { imageSocket, roomSocket } from "./sockets.js";
-import { getPlayerQuantity, postJSON } from "./util.js";
+import { getPlayerQuantity, postJSON, promptValidation } from "./util.js";
 
 const roomId = sessionStorage.getItem("roomId");
 
@@ -7,17 +7,28 @@ document.getElementById("img-orig").src = sessionStorage.getItem("imageOrig");
 
 document.getElementById("confirm-btn").addEventListener("click", () => {
     const query = document.getElementById("description").value;
-    fetch("http://localhost:8080/image/generate",
-        postJSON({ query: query })
-    )
-        .then(response => response.json())
-        .then(data => checkStatus(data.uuid));
+    const errorMessageElement = document.getElementById("error-message");
 
-    waitingForResults();
+    if (promptValidation(query)) {
+        document.getElementById("loading").style.display = "flex";
+
+        fetch("http://localhost:8080/image/generate",
+            postJSON({ query: query })
+        )
+            .then(response => response.json())
+            .then(data => checkStatus(data.uuid))
+            .catch(error => {
+                errorMessageElement.textContent = "Ошибка генерации. Попробуйте позже.";
+                errorMessageElement.style.display = "block";
+            })
+    } else {
+        if (query.length < 1)
+            errorMessageElement.textContent = "Необходимо описание";
+        else
+            errorMessageElement.textContent = "Введены запрещенные символы";
+        errorMessageElement.style.display = "block";
+    }
 });
-
-function waitingForResults() {
-}
 
 function checkStatus(uuid) {
     let timerId = setInterval(() => {
@@ -59,6 +70,7 @@ imageSocket.onmessage = async event => {
     const playerQuantity = await getPlayerQuantity(roomId);
 
     if (generationResults.length == playerQuantity) {
+        document.getElementById("loading").style.display = "none";
         sessionStorage.removeItem("generationResults");
         document.getElementById("desc-block").remove();
         createImgBlock();
@@ -67,12 +79,15 @@ imageSocket.onmessage = async event => {
 
 function createImgBlock() {
     const playerName = document.createElement("p");
-    const imageResult = document.createElement("img");
+    const originalImage = document.getElementById("img-orig");  // Исходная картинка
+    const generatedImage = document.createElement("img");
     const nextBtn = document.createElement("button");
 
     playerName.id = "player-name";
-    imageResult.id = "image-result";
-    nextBtn.textContent = "=>";
+    generatedImage.id = "image-result";
+
+    nextBtn.id = "next-btn";
+    nextBtn.textContent = "Далее";
 
     nextBtn.addEventListener("click", () => {
         if (generationResults.length > 0)
@@ -81,9 +96,13 @@ function createImgBlock() {
             gameOver();
     });
 
-    document.getElementById("img-block").appendChild(playerName);
-    document.getElementById("img-block").appendChild(imageResult);
-    document.getElementById("img-block").appendChild(nextBtn);
+    const imgBlock = document.getElementById("img-block");
+    imgBlock.appendChild(playerName);
+    imgBlock.appendChild(generatedImage);
+    imgBlock.appendChild(nextBtn);
+
+    // Применяем классы для стилей
+    imgBlock.classList.add("img-block-flex");
 
     updateResult();
 }

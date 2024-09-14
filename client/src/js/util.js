@@ -17,8 +17,17 @@ export function getPlayerQuantity(roomId) {
     return quantity;
 }
 
-export function inputValidation(input) {
-    const regexp = /^\w{2,}$/;
+export function nameValidation(input) {
+    const regexp = /^[\wа-яА-ЯёЁ]{2,}$/;
+
+    if (regexp.test(input))
+        return true;
+    else
+        return false;
+}
+
+export function promptValidation(input) {
+    const regexp = /^[\w\s,.а-яА-ЯёЁ-]+$/;
 
     if (regexp.test(input))
         return true;
